@@ -7,8 +7,8 @@ This means that you can customize what information it's pulling and posting with
 You do have to provide twitter4j.properties file in the root of your classpath with your keys/tokens in this format suggested by twitter4j:
 
 debug=true
-oauth.consumerKey=
-oauth.consumerSecret=
-oauth.accessToken=
-oauth.accessTokenSecret=
+oauth.consumerKey= ____________
+oauth.consumerSecret= ___________
+oauth.accessToken= ____________
+oauth.accessTokenSecret= __________
 
