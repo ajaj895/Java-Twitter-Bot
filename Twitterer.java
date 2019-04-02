@@ -1,9 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package weathertwitterbot;
+    Huge shoutout to Mistapotta's video on the Twitter4j api in this video here with: https://youtu.be/kgj3mjclAsM ,
+    I used it as a reference for the twitterer class with this project.
+*/
+package myBot;
 
 import java.io.IOException;
 import java.io.File;//to be added later (for random generated tweet)
@@ -13,9 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.Scanner;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.Status;
@@ -23,6 +19,7 @@ import twitter4j.TwitterException;
 import twitter4j.DirectMessage;
 import twitter4j.DirectMessageList;
 import twitter4j.ResponseList;
+import myBot.Webscrape;
 
 /**
  *
@@ -50,7 +47,12 @@ public class Twitterer {//TODO: J A V A D O C S!
         Status status = twitter.updateStatus(message);
         System.out.println("Status has been updated to: "+ status.getText());
     }
-    
+    //gets the most recent status
+    /**
+     * This method returns a single status object, the most recent status at the time of method call.
+     * @return Most recent status in the form of an object of type status.
+     * @throws TwitterException 
+     */
     public Status getRecent() throws TwitterException{
         ResponseList<Status> status = twitter.getUserTimeline();
         Status currentStatus = null; 
@@ -154,10 +156,13 @@ public class Twitterer {//TODO: J A V A D O C S!
     }
     public void getReceivedMessages(DirectMessageList allMessages, LinkedList<DirectMessage> sentMessages, LinkedList<DirectMessage> receivedMessages) throws TwitterException{
         for(int i = 0; i<allMessages.size();){
-            if(allMessages.get(i).getRecipientId() == myId()){
+            if(allMessages.get(i).getRecipientId() == myId() && ageToDays(allMessages.get(i))<1){
                 receivedMessages.addLast(allMessages.remove(i));
-            }else{
+            }else if(ageToDays(allMessages.get(i))<1){
                 sentMessages.addLast(allMessages.remove(i));
+            }
+            else{
+                allMessages.remove(i);
             }
         }
         
@@ -166,23 +171,11 @@ public class Twitterer {//TODO: J A V A D O C S!
         twitter.sendDirectMessage(target, message);
     }
     
-    //tweeting methods
-    
+    //*****tweeting methods*****
+    //Work in progress
     //this tweets weather conditions (for Macomb, IL. To change the location, just change that URL to your local National Weather Service location
-    private String weather() throws IOException{
-        final Document document = Jsoup.connect("https://forecast.weather.gov/MapClick.php?x=68&y=83&site=ilx&zmx=&zmy=&map_x=67&map_y=83#.XFOy5KpKhPY").get();
-        String currentCond = document.select("p.myforecast-current").text();
-        String temp = document.select("p.myforecast-current-lrg").text();//.text gets the value from the HTML
-        String tempC = document.select("p.myforecast-current-sm").text();//temp in celcius
-        String storeString = "Current Conditions "+currentCond+"\n"+"Temperature "+temp+" ("+tempC+")";
-        for(Element row : document.select("div#current_conditions_detail.pull-left tr")){//collect current conditions, and last time updated.
-            storeString=storeString+"\n"+row.text();
-        }
-        storeString = "Here are the current weather conditions in Macomb, IL: \n"+storeString;//change this string for localization.
-        return storeString;
-    }
     public void weatherTweet() throws IOException, TwitterException{
-        tweetOut(weather());//tweets here
+        tweetOut(Webscrape.getWeather());//tweets here
     }
 
     
