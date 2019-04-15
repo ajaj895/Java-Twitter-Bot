@@ -1,12 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package myBot;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Scanner;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,7 +28,11 @@ public class Webscrape {
         storeString = "Here are the current weather conditions in Macomb, IL: \n"+storeString;//change this string for localization.
         return storeString;
     }
-    
+    /**
+     * This method gets data from the National Weather Service and returns information, in a String, for local weather data for Macomb, IL.
+     * @return String - Returns formatted weather data in a String.
+     * @throws IOException Throws an IOException if connection to the NWS website cannot be made.
+     */
     public static String getWeather() throws IOException{//gets the weather() which gets the weather, totally not confusing
         return weather();
     }
@@ -62,9 +63,42 @@ public class Webscrape {
         }
         return schedule;
     }
-    
+    /**
+     * This method gets information from https://spaceflightnow.com/launch-schedule/ about upcoming space launches, times, dates, missions, and returns that information in a LinkedList.
+     * @return LinkedList - Returns information about upcoming spaces launches including: time, date, mission, and launch vehicle.
+     * @throws IOException Throws an IOException if connection to https://spaceflightnow.com/launch-schedule/ cannot be made.
+     */
     public static LinkedList<String> getLaunchCal() throws IOException{
         return LaunchCal();
+    }
+    private static LinkedList<String> wiuEvents() throws IOException{
+        final Document wiu = Jsoup.connect("http://www.wiu.edu/wiucalendar/").get();
+        LinkedList<String> eventList = new LinkedList<>();
+        for(Element event : wiu.select("div#main h3.date, tr")){
+            String curEvent = event.text();
+            eventList.add(curEvent);
+        }
+        return eventList;
+    }
+    /**
+     * This method gets information from http://www.wiu.edu/wiucalendar/ about events happen around campus. The first node is always a day, potentially followed by an event.
+     * @return LinkedList - Returns information about events in the form of a LinkedList that holds strings.
+     * @throws IOException Throws an IOException if connection to http://www.wiu.edu/wiucalendar/ cannot be made.
+     */
+    public static LinkedList<String> getWiuEvents() throws IOException{
+        LinkedList<String> allEvents = wiuEvents();
+        Scanner sc;
+        LinkedList<String> curEvents = new LinkedList<>();
+        while(!allEvents.isEmpty()){
+            curEvents.add(allEvents.remove());
+            sc = new Scanner(allEvents.getFirst());
+            String temp = sc.next();
+            //this if loop makes sure only a day of events is returned
+            if(temp.equalsIgnoreCase("Monday,")||temp.equalsIgnoreCase("Tuesday,")||temp.equalsIgnoreCase("Wednesday,")||temp.equalsIgnoreCase("Thursday,")||temp.equalsIgnoreCase("Friday,")||temp.equalsIgnoreCase("Saturday,")||temp.equalsIgnoreCase("Sunday,")){
+                break;
+            }
+        }
+        return curEvents;
     }
     
     

@@ -5,8 +5,8 @@
 package myBot;
 
 import java.io.IOException;
-import java.io.File;//to be added later (for random generated tweet)
-import java.io.FileNotFoundException;//to be added later (for random generated tweet)
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,17 +20,20 @@ import twitter4j.TwitterException;
 import twitter4j.DirectMessage;
 import twitter4j.DirectMessageList;
 import twitter4j.ResponseList;
-import myBot.Webscrape;
 
 /**
  *
  * @author Evan
  */
-public class Twitterer {//TODO: J A V A D O C S!
+public class Twitterer {
     private Twitter twitter;
-    private PrintStream consolePrint;//TODO: figure out what this is
+    private PrintStream consolePrint;
     private List<Status> statuses;
-    
+    /**
+     * Constructor for the Twitterer object.
+     * 
+     * @param console the PrintStream used to show the events of the program
+     */
     public Twitterer(PrintStream console){
         //makes a twitter object and connects and does that login stuff
         twitter = TwitterFactory.getSingleton();
@@ -41,8 +44,8 @@ public class Twitterer {//TODO: J A V A D O C S!
     /**
      * 
      * @param message  A message you wish to tweet out.
-     * @throws TwitterException
-     * @throws IOException 
+     * @throws TwitterException Throws a TwitterException if no connection with twitter is made or an error had occurred when tweeting.
+     * @throws IOException Throws a IOException if a connection to the internet couldn't be made.
      */
     public void  tweetOut(String message) throws TwitterException, IOException{
         Status status = twitter.updateStatus(message);
@@ -52,7 +55,7 @@ public class Twitterer {//TODO: J A V A D O C S!
     /**
      * This method returns a single status object, the most recent status at the time of method call.
      * @return Most recent status in the form of an object of type status.
-     * @throws TwitterException 
+     * @throws TwitterException Throws a Twitter Exception if connection cannot be made to twitter, or an internal error within twitter.
      */
     public Status getRecent() throws TwitterException{
         ResponseList<Status> status = twitter.getUserTimeline();
@@ -65,16 +68,32 @@ public class Twitterer {//TODO: J A V A D O C S!
         return currentStatus;
     }
     //returns the 20 most recent statuses of the authenticating user (you), if empty, will prolly return null.
+    /**
+     * This method returns the 20 most recent statuses of the authenticating user in a ResponseList of type Status.
+     * @return ResponseList - Stores 20 of the most recent statuses, returns null if empty.
+     * @throws TwitterException Throws a TwitterException if connection to twitter cannot be made.
+     */
     public ResponseList<Status> getRecents() throws TwitterException{
         return twitter.getUserTimeline();
     }
+    /**
+     * This method returns the 20 most recent mentions of the authenticating user (you) in a ResponseList of type Status.
+     * @return ResponseList - Stores 20 of the most recent statuses that mention the authenticating user, returns null if empty.
+     * @throws TwitterException Throws a TwitterException if connection to twitter cannot be made.
+     */
     public ResponseList<Status> getMentions() throws TwitterException{
         return twitter.getMentionsTimeline();
     }
+    /**
+     * This method returns the 20 most recent statuses of the authenticating user that have been retweeted in a ResponseList of type Status.
+     * @return ResponseList - Stores 20 of the most recent statuses of the authenticating user that have been retweeted, returns null if empty.
+     * @throws TwitterException Throws a TwitterException if connection to twitter cannot be made.
+     */
     public ResponseList<Status> getRetweets() throws TwitterException{//get retweets of me. I might add a method to get a specific post's retweets later.
         return twitter.getRetweetsOfMe();
     }
-    //Age section and overloading.
+    //###### Age section and overloading. ######
+
     private long getAge(Status status){//returns age of post in miliseconds (starting date Jan 1 1970
         long age = status.getCreatedAt().getTime();
         return age;
@@ -83,34 +102,74 @@ public class Twitterer {//TODO: J A V A D O C S!
         long age = message.getCreatedAt().getTime();
         return age;
     }
+    /**
+     * This method gets the age of a message in days.
+     * @param message This parameter is message that will checked for it's age.
+     * @return long - Returns the age of the message in days.
+     */
     public long ageToDays(DirectMessage message){
         long age = System.currentTimeMillis()-getAge(message);
         return TimeUnit.MILLISECONDS.toDays(age);
     }
+    /**
+     * This method gets the age of a status in days.
+     * @param status This parameter is the status that will be checked for it's age.
+     * @return long - Returns the age of the status in days.
+     */
     public long ageToDays(Status status){
         long age = System.currentTimeMillis()-getAge(status);
         return TimeUnit.MILLISECONDS.toDays(age);
     }
+    /**
+     * This method gets the age of a message in hours.
+     * @param message This parameter is the message that will be checked for it's age.
+     * @return long - Returns the age of the message in hours.
+     */
     public long ageToHours(DirectMessage message){
         long age = System.currentTimeMillis()-getAge(message);
         return TimeUnit.MILLISECONDS.toHours(age);
     }
+    /**
+     * This method gets the age of a status in hours.
+     * @param status This parameter is the status that will be checked for it's age.
+     * @return long - Returns the age of the status in hours.
+     */
     public long ageToHours(Status status){
         long age = System.currentTimeMillis()-getAge(status);
         return TimeUnit.MILLISECONDS.toHours(age);
     }
+    /**
+     * This method gets the age of a message in minutes.
+     * @param message This parameter is the message that will be checked for it's age.
+     * @return long - Returns the age of the message in minutes.
+     */
     public long ageToMinutes(DirectMessage message){
         long age = System.currentTimeMillis()-getAge(message);
         return TimeUnit.MILLISECONDS.toMinutes(age);
     }
+    /**
+     * This method gets the age of a status in minutes.
+     * @param status This parameter is the status that will be checked for it's age.
+     * @return long - Returns the age of the status in minutes.
+     */
     public long ageToMinutes(Status status){
         long age = System.currentTimeMillis()-getAge(status);
         return TimeUnit.MILLISECONDS.toMinutes(age);
     }
+    /**
+     * This method gets the age of a message in seconds.
+     * @param message This parameter is the message that will be checked for it's age.
+     * @return long - Returns the age of the message in seconds.
+     */
     public long ageToSeconds(DirectMessage message){
         long age = System.currentTimeMillis()-getAge(message);
         return TimeUnit.MILLISECONDS.toSeconds(age);
     }
+    /**
+     * This method gets the age of a status in seconds.
+     * @param status This parameter is the status that will be checked for it's age.
+     * @return long - Returns the age of the status in seconds.
+     */
     public long ageToSeconds(Status status){
         long age = System.currentTimeMillis()-getAge(status);
         return TimeUnit.MILLISECONDS.toSeconds(age);
@@ -119,9 +178,20 @@ public class Twitterer {//TODO: J A V A D O C S!
     private long myId() throws TwitterException{
         return twitter.getId();
     }
+    /**
+     * This method checks to see if a status is a day (or more) old.
+     * @param status This parameter is the status that will be checked if it is a day or more old.
+     * @return boolean - Returns a true/false value if ageToDays() is greater than 0
+     */
     public boolean dayOld(Status status){
         return (ageToDays(status)>0);
     }
+    /**
+     * This method will check a status for an inputed keyword.
+     * @param word The word that will be searched for in the status.
+     * @param status The status that will be searched through for the keyword.
+     * @return boolean - Returns a true/false value if the keyword is found in the given status.
+     */
     public boolean keywordCheck(String word, Status status){
         Scanner sc = new Scanner(status.getText());
         boolean key = false;
@@ -133,6 +203,12 @@ public class Twitterer {//TODO: J A V A D O C S!
         } 
         return key;
     }
+    /**
+     * This method will check a message for an inputed keyword.
+     * @param word The word that will be searched for in the message.
+     * @param message The message that will be searched through for the keyword. 
+     * @return boolean - Returns a true/false value if the keyword is found in the given message.
+     */
     public boolean keywordCheck(String word, DirectMessage message){
         Scanner sc = new Scanner(message.getText());
         boolean key = false;
@@ -145,6 +221,12 @@ public class Twitterer {//TODO: J A V A D O C S!
         return key;
     }
     //might return null if DirectMessageList is empty.
+    /**
+     * This method will get all messages and put them in a DirectMessageList.
+     * @param howMany The number of messages to return (max: 50, min: 0).
+     * @return DirectMessageList - Returns the DirectMessageList that contains all message types up to 50 messages.
+     * @throws TwitterException Throws a TwitterException if connection to Twitter cannot be made.
+     */
     public DirectMessageList getAllMessages(int howMany) throws TwitterException{
         if(howMany > 50){
             howMany = 50;
@@ -155,6 +237,13 @@ public class Twitterer {//TODO: J A V A D O C S!
         }
         return twitter.getDirectMessages(howMany);
     }
+    /**
+     * This method will sort direct messages into the proper category of sent and received messages.
+     * @param allMessages An unsorted DirectMessageList containing sent and received messages.
+     * @param sentMessages A DirectMessageList used to store sent messages.
+     * @param receivedMessages A DirectMessageList used to store received messages.
+     * @throws TwitterException Throws a TwitterException if a connection to Twitter cannot be made.
+     */
     public void getReceivedMessages(DirectMessageList allMessages, LinkedList<DirectMessage> sentMessages, LinkedList<DirectMessage> receivedMessages) throws TwitterException{
         for(int i = 0; i<allMessages.size();){
             if(allMessages.get(i).getRecipientId() == myId() && ageToDays(allMessages.get(i))<1){
@@ -168,6 +257,12 @@ public class Twitterer {//TODO: J A V A D O C S!
         }
         
     }
+    /**
+     * This method will send a message, a String, to a target, a twitter id in the form of a long.
+     * @param message A String to be sent.
+     * @param target A Twitter id in the form of a long.
+     * @throws TwitterException Throws a TwitterException if a connection to Twitter cannot be made. Also throws a TwitterException if an error occurs when sending the message.
+     */
     public void sendMessage(String message, long target) throws TwitterException{
         twitter.sendDirectMessage(target, message);
     }
@@ -175,15 +270,24 @@ public class Twitterer {//TODO: J A V A D O C S!
     //*****tweeting methods*****
     //Work in progress
     //this tweets weather conditions (for Macomb, IL. To change the location, just change that URL to your local National Weather Service location
+    /**
+     * This method will tweet out a weather related method (to Macomb, IL), obtaining it's information from the Webscrape class.
+     * @throws IOException Throws an IOException if the webscraper was not able to connect to it's target website. 
+     * @throws TwitterException Throws a TwitterException if a connection to Twitter cannot be made. Also throws a TwitterException if an error occurs when tweeting out.
+     * @see Webscrape
+     */
     public void weatherTweet() throws IOException, TwitterException{
         tweetOut(Webscrape.getWeather());//tweets here
     }
-    public void randomTweet() throws IOException, TwitterException{
-        tweetOut(randomTweetGen());//also for testing purposes
+    /**
+     * This method tweets out a randomly generated string from a list of statements and responses in text files.
+     * @throws IOException Throws an IOException if the files could not be open or found.
+     * @throws TwitterException Throws a TwitterException if a connection to Twitter could not be made. Also throws a TwitterException if an error occurs when tweeting out.
+     */
+    public void randomTweet(File statements, File responses) throws IOException, TwitterException{
+        tweetOut(randomTweetGen(statements, responses));
     }
-    private String randomTweetGen() throws FileNotFoundException{
-        File statements = new File("C:/Users/Evan/Documents/Coding Adventures/Personal Projects/Personal Java/Experimental/WeatherTwitterBot/src/statements.txt");
-        File responses = new File("C:/Users/Evan/Documents/Coding Adventures/Personal Projects/Personal Java/Experimental/WeatherTwitterBot/src/responses.txt");
+    private String randomTweetGen(File statements, File responses) throws FileNotFoundException{
         Scanner statementSc = null;
         Random rand = new Random();
         try{
@@ -234,8 +338,24 @@ public class Twitterer {//TODO: J A V A D O C S!
         content = content+"\n";
         return content;
     }
-
-    
-    
-    
+    public void eventsTweet() throws IOException, TwitterException, InterruptedException{
+        tweetOut(eventsGet());
+    }
+    private String eventsGet() throws IOException, TwitterException, InterruptedException{//Tweets events if more than 280 characters.
+        LinkedList<String> myList = Webscrape.getWiuEvents();
+        String storeString = "Today's events:";
+        while(!myList.isEmpty()){
+            String current = myList.remove();//280 charater limit
+            if(storeString.length() + current.length() > 280){
+                tweetOut(storeString);
+                Thread.sleep(5000);//waits 5 seconds before continuing.
+                storeString = "Events Continued:\n"+current;
+            } else {
+                storeString = storeString + "\n" + current;
+            }
+            
+        }
+        return storeString;
+    }
+  
 }
