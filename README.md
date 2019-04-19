@@ -20,6 +20,6 @@ The twitterer class has a random tweet method, where you can create your own tex
 Make sure you return after each statement, the program uses scanner.nextLine() 
 The response file is a lot easier, just a response per line also using scanner.nextLine()
 
-Also Javadocs don't exist yet, I am working on it ... eventually.
+Each public method *except for main* have documentation.
 
 Huge shoutout to Mistapotta's video on the Twitter4j api in this video here with: https://youtu.be/kgj3mjclAsM ,  I used it as a reference for the twitterer class with this project.
