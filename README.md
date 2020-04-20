@@ -6,7 +6,7 @@ Evan Colwell
 ec-colwell@wiu.edu
 eccolwell99@gmail.com
 
-## usage
+## USAGE
 
 to run the program, use the following command:
 
@@ -16,7 +16,7 @@ This will then ask for the location of the questions .txt file and then the answ
 
 For more information, consider looking at the Twitter4j API here: twitter4j.org/javadoc/index.html  and this is a tutorial I used to learn Twitter4j to Mistapotta's video on the Twitter4j api in this video here with: https://youtu.be/kgj3mjclAsM , I used it as a reference for the twitterer class with this project. 
 
-## about
+## ABOUT
 
 this is a twitter bot i am working on using the java twitter4j library.
 
